@@ -1,0 +1,83 @@
+<html>
+<head>
+</head>
+<body>
+
+
+	<p id="status">Drawing</p>
+	<canvas id='canvas' width="500" height = "500"></canvas>
+	<script>
+
+	function connect(ip_address) {
+
+		var canvas = document.getElementById('canvas');
+
+		if (canvas.getContext)
+		{
+
+			var context = canvas.getContext('2d'); 
+
+			 context.clearRect(0, 0, canvas.width, canvas.height);
+
+			 context.fillStyle = 'rgba(155,155,255,1.0)';
+			 context.fillRect(0,0,window.innerWidth,window.innerHeight);
+
+			var status = document.getElementById('status')
+			status.innerHTML = "Connecting";
+			var myWebSocket = new WebSocket("ws://"+ip_address+":8080/");
+			myWebSocket.onopen = function(evt) { status.innerHTML = "Connected"; };
+
+			var indexOfFrames = 0
+			var previousX = 0
+			var previousY = 0
+			context.fillStyle = 'rgba(255,155,155,1.0)';
+
+			myWebSocket.onmessage = function(evt) { 
+				var point = evt.data.split(",")
+				var x = point[0]
+				var y = point[1]
+				if(indexOfFrames == 0)
+				{
+					context.canvas.width = x // Width
+					context.canvas.height = y // Height
+				}
+				else if(x==-1 && y==-1)
+				{
+					context.clearRect(0, 0, canvas.width, canvas.height);
+			 		context.fillStyle = 'rgba(155,155,255,1.0)';
+			 		context.fillRect(0,0,window.innerWidth,window.innerHeight);
+			 		context.fillStyle = 'rgba(255,155,155,1.0)';
+			 		context.beginPath();
+					indexOfFrames = 0
+					return
+				}
+				else if(x == -2 && y==-2)
+				{
+					indexOfFrames = 1
+					return
+				}
+				else if(indexOfFrames == 1)
+				{
+					context.beginPath();
+					context.moveTo(x,y)
+				}
+				else
+				{
+						context.lineTo(x,y);
+						context.stroke()
+				}			
+				indexOfFrames ++
+			}
+			myWebSocket.onclose = function(evt) { status.innerHTML = "Connection closed"; };
+};
+}
+</script>
+
+<form action = "javascript:connect(ip_address.value)">
+  <label for="ip_address">IP Address</label>
+  <input type="text" id="ip_address" name="ip_address">
+  <input type="submit" value="Connect">
+</form>
+
+</body>
+</html>
