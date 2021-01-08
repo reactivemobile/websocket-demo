@@ -21,12 +21,11 @@ function connect(ip_address) {
         }
 
         webSocket.onclose = function(frame) {
-            status.innerHTML = "Disconnected";
+            status.innerHTML = "Socket was disconnected";
         };
     };
 
     function handleFrame(frame) {
-
         var content = frame.data
 
         if (content.startsWith("start")) {
@@ -77,6 +76,8 @@ function connect(ip_address) {
         canvas.height = height * scale;
 
         clearCanvas()
+
+        console.log("Ready");
     }
 
     function clearCanvas() {

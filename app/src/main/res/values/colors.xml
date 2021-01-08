@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="canvas_colour">#9b9bff</color>
+    <color name="canvas_colour_disabled">#aaaaaa</color>
 </resources>

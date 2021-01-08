@@ -15,7 +15,7 @@ import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class Server {
+class Server(val connectionState: ConnectionState) {
     private val drawingQueue = ConcurrentLinkedQueue<Point>()
     private val commandQueue = ConcurrentLinkedQueue<String>()
 
@@ -23,16 +23,18 @@ class Server {
 
     fun start(measuredWidth: Int, measuredHeight: Int) {
         server = embeddedServer(Jetty, port = 8080) {
-
+            Log.d("Server", "Started")
             install(WebSockets)
+            connectionState.accept(running = true, connected = false)
 
             routing {
                 webSocket("/") {
-                    Log.d("Server", "Connected")
-
                     drawingQueue.clear()
 
+                    Log.d("Server", "Connected, sending message to start")
                     outgoing.send(Frame.Text("start,${measuredWidth},${measuredHeight}\n"))
+
+                    connectionState.accept(running = true, connected = true)
 
                     while (true) {
                         if (!drawingQueue.isEmpty()) {
@@ -52,13 +54,14 @@ class Server {
                     call.respond("Hello World Android!!\n\n")
                 }
             }
-        }.start(false)
+        }
 
-        Log.d("Server", "Started")
+        server.start()
     }
 
     fun stop() {
         server.stop(500, 1000)
+        connectionState.accept(running = false, connected = false)
         drawingQueue.clear()
         Log.d("Server", "Stopped")
     }
@@ -74,5 +77,9 @@ class Server {
 
     fun pointerLifted() {
         commandQueue.add("pointer_lifted")
+    }
+
+    fun interface ConnectionState{
+        fun accept(running: Boolean, connected: Boolean)
     }
 }
