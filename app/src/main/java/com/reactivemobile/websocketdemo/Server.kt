@@ -1,4 +1,4 @@
-package com.reactivemobile.streamingserver
+package com.reactivemobile.websocketdemo
 
 import android.graphics.Point
 import android.util.Log

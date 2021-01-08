@@ -1,4 +1,4 @@
-package com.reactivemobile.streamingserver
+package com.reactivemobile.websocketdemo
 
 import android.annotation.SuppressLint
 import android.net.wifi.WifiManager

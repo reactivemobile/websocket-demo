@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.reactivemobile.streamingserver"
+        applicationId "com.reactivemobile.websocketdemo"
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
