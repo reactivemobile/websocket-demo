@@ -12,25 +12,17 @@ class MainActivity : AppCompatActivity() {
 
     private val server = Server()
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        start_button.setOnClickListener {
-            server.start(pane_view.measuredWidth, pane_view.measuredHeight)
-            status.text = getString(R.string.running, getIpAddress())
-        }
+        setupButtonListeners()
 
-        stop_button.setOnClickListener {
-            server.stop()
-            status.text = getString(R.string.running, getIpAddress())
-        }
+        setupDrawListener()
+    }
 
-        clear_button.setOnClickListener {
-            server.clear()
-        }
-
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDrawListener() {
         pane_view.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN || motionEvent.action == MotionEvent.ACTION_MOVE) {
                 server.update(motionEvent.x.toInt(), motionEvent.y.toInt())
@@ -38,6 +30,28 @@ class MainActivity : AppCompatActivity() {
                 server.pointerLifted()
             }
             true
+        }
+    }
+
+    private fun setupButtonListeners() {
+        start_button.setOnClickListener {
+            server.start(pane_view.measuredWidth, pane_view.measuredHeight)
+            status.text = getString(R.string.running, getIpAddress())
+            start_button.isEnabled = false
+            stop_button.isEnabled = true
+            clear_button.isEnabled = true
+        }
+
+        stop_button.setOnClickListener {
+            server.stop()
+            status.text = getString(R.string.stopped)
+            start_button.isEnabled = true
+            stop_button.isEnabled = false
+            clear_button.isEnabled = false
+        }
+
+        clear_button.setOnClickListener {
+            server.clear()
         }
     }
 

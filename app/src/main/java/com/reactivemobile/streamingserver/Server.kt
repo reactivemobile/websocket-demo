@@ -16,8 +16,8 @@ import io.ktor.websocket.webSocket
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class Server {
-
-    private val queue = ConcurrentLinkedQueue<Point>()
+    private val drawingQueue = ConcurrentLinkedQueue<Point>()
+    private val commandQueue = ConcurrentLinkedQueue<String>()
 
     private lateinit var server: JettyApplicationEngine
 
@@ -28,18 +28,26 @@ class Server {
 
             routing {
                 webSocket("/") {
-                    Log.d("Server", "connected")
+                    Log.d("Server", "Connected")
 
-                    outgoing.send(Frame.Text("${measuredWidth},${measuredWidth}\n"))
+                    drawingQueue.clear()
+
+                    outgoing.send(Frame.Text("start,${measuredWidth},${measuredHeight}\n"))
 
                     while (true) {
-                        if (!queue.isEmpty()) {
-                            val point = queue.remove()
+                        if (!drawingQueue.isEmpty()) {
+                            val point = drawingQueue.remove()
                             outgoing.send(Frame.Text("${point.x},${point.y}\n"))
+                        }
+
+                        if (!commandQueue.isEmpty()) {
+                            val command = commandQueue.remove()
+                            outgoing.send(Frame.Text(command))
                         }
                     }
                 }
-                // Open {url}/hello to test if the server is working
+
+                // curl {url}/hello to test if the server is working
                 get("/hello") {
                     call.respond("Hello World Android!!\n\n")
                 }
@@ -51,20 +59,20 @@ class Server {
 
     fun stop() {
         server.stop(500, 1000)
-        queue.clear()
+        drawingQueue.clear()
         Log.d("Server", "Stopped")
     }
 
     fun update(x: Int, y: Int) {
-        queue.add(Point(x, y))
+        drawingQueue.add(Point(x, y))
     }
 
     fun clear() {
-        queue.clear()
-        queue.add(Point(-1, -1))
+        drawingQueue.clear()
+        commandQueue.add("clear")
     }
 
     fun pointerLifted() {
-        queue.add(Point(-2, -2))
+        commandQueue.add("pointer_lifted")
     }
 }
