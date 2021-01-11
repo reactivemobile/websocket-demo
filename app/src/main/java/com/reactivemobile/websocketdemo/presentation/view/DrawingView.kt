@@ -1,4 +1,4 @@
-package com.reactivemobile.websocketdemo
+package com.reactivemobile.websocketdemo.presentation.view
 
 import android.content.Context
 import android.graphics.Canvas

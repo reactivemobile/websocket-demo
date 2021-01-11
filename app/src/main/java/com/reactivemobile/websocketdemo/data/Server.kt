@@ -1,4 +1,4 @@
-package com.reactivemobile.websocketdemo
+package com.reactivemobile.websocketdemo.data
 
 import android.graphics.Point
 import android.util.Log

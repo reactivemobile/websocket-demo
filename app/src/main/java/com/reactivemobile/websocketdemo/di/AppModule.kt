@@ -1,5 +1,6 @@
-package com.reactivemobile.websocketdemo
+package com.reactivemobile.websocketdemo.di
 
+import com.reactivemobile.websocketdemo.data.Server
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

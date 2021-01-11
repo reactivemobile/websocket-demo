@@ -1,9 +1,10 @@
-package com.reactivemobile.websocketdemo
+package com.reactivemobile.websocketdemo.presentation
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reactivemobile.websocketdemo.data.Server
 import kotlinx.coroutines.launch
 
 class DrawingViewModel @ViewModelInject constructor(private val server: Server) : ViewModel() {

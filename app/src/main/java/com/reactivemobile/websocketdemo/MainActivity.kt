@@ -3,6 +3,7 @@ package com.reactivemobile.websocketdemo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commitNow
+import com.reactivemobile.websocketdemo.presentation.DrawingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

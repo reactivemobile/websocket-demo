@@ -1,4 +1,4 @@
-package com.reactivemobile.websocketdemo
+package com.reactivemobile.websocketdemo.presentation
 
 import android.annotation.SuppressLint
 import android.net.wifi.WifiManager
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.reactivemobile.websocketdemo.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_drawing.*
 import java.math.BigInteger

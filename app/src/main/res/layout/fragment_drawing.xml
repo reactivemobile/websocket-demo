@@ -38,7 +38,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/status" />
 
-    <com.reactivemobile.websocketdemo.DrawingView
+    <com.reactivemobile.websocketdemo.presentation.view.DrawingView
         android:id="@+id/drawing_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
