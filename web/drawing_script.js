@@ -13,14 +13,17 @@ function connect(ip_address) {
         var scale = 0
 
         webSocket.onopen = function(frame) {
-            status.innerHTML = "Connected to "+ip_address + ":8080";
+            webSocket.send("Ready")
+            status.innerHTML = "Connected to " + ip_address + ":8080";
         };
 
         webSocket.onmessage = function(frame) {
             handleFrame(frame)
+            return false
         }
 
         webSocket.onclose = function(frame) {
+            console.log("Socket disconnected " + frame)
             status.innerHTML = "Socket was disconnected";
         };
     };
@@ -30,33 +33,28 @@ function connect(ip_address) {
 
         if (content.startsWith("start")) {
             handleStartFrame(content)
-            return
-        }
-
+        } else
         if (content == "clear") {
             clearCanvas();
             lineIndex = 0;
-            return;
-        }
-
+        } else
         if (content == "pointer_lifted") {
             lineIndex = 0;
-            return;
-        }
-
-        var point = content.split(",")
-        var x = point[0] * scale
-        var y = point[1] * scale
-
-        if (lineIndex == 0) {
-            context.beginPath();
-            context.moveTo(x, y)
         } else {
-            context.lineTo(x, y);
-            context.stroke()
-        }
+            var point = content.split(",")
+            var x = point[0] * scale
+            var y = point[1] * scale
 
-        lineIndex++
+            if (lineIndex == 0) {
+                context.beginPath();
+                context.moveTo(x, y)
+            } else {
+                context.lineTo(x, y);
+                context.stroke()
+            }
+
+            lineIndex++
+        }
     }
 
     // Scale the canvas to match ratio of device screen
