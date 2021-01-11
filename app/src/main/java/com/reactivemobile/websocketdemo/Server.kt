@@ -66,8 +66,9 @@ class Server {
                         }
                     }
 
-                    // The socket is no longer active so update the UI
+                    // The socket is no longer active so stop the server
                     connectionState.accept(running = false, connected = false)
+                    stop()
                 }
 
                 // curl {url}/hello to test if the server is working
